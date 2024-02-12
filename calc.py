@@ -1,60 +1,78 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLineEdit, QPushButton, QGridLayout
-from PyQt5.QtGui import QFont
-from PyQt5.QtCore import Qt
+import PyQt5.QtWidgets as qtw
+import PyQt5.QtGui as qtg
 
-
-class CalculatorApp(QMainWindow):
+class MainWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("Hello world")
 
-        self.setWindowTitle("Calculator")
+        self.setLayout(qtw.QVBoxLayout())
 
-        # Create central widget and layout
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
-        layout = QVBoxLayout(central_widget)
+        # create a label
+        my_label = qtw.QLabel("Hello world, what's your name?")
 
-        # Create entry widget for input
-        self.entry = QLineEdit()
-        self.entry.setFixedHeight(50)
-        font = QFont("Arial", 20)
-        self.entry.setFont(font)
-        self.entry.setAlignment(Qt.AlignRight)
-        layout.addWidget(self.entry)
+        #change font size of the label
+        my_label.setFont(qtg.QFont('Helvetica', 18))
+        self.layout().addWidget(my_label)
 
-        # Create buttons for digits and operations
-        buttons = [
-            ('7', 0, 0), ('8', 0, 1), ('9', 0, 2), ('/', 0, 3),
-            ('4', 1, 0), ('5', 1, 1), ('6', 1, 2), ('*', 1, 3),
-            ('1', 2, 0), ('2', 2, 1), ('3', 2, 2), ('-', 2, 3),
-            ('C', 3, 0), ('0', 3, 1), ('=', 3, 2), ('+', 3, 3)
-        ]
+        # create a entry box
+        my_entry = qtw.QLineEdit()
+        my_entry.setObjectName("name_field")
+        my_entry.setText("")
+        self.layout().addWidget(my_entry)
 
-        grid_layout = QGridLayout()
-        for (text, row, column) in buttons:
-            button = QPushButton(text)
-            button.setFixedSize(50, 50)
-            button.clicked.connect(lambda _, t=text: self.on_button_click(t))
-            grid_layout.addWidget(button, row, column)
-
-        layout.addLayout(grid_layout)
-
-    def on_button_click(self, value):
-        if value == 'C':
-            self.entry.clear()
-        elif value == '=':
-            try:
-                result = eval(self.entry.text())
-                self.entry.setText(str(result))
-            except Exception as e:
-                self.entry.setText("Error")
-        else:
-            self.entry.insert(value)
+        # create a button
+        my_button = qtw.QPushButton("Button", clicked = lambda: press_it())
+        self.layout().addWidget(my_button)
 
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = CalculatorApp()
-    window.show()
-    sys.exit(app.exec_())
+        def press_it():
+            my_label.setText(f"Hello {my_entry.text()}!!")
+            my_entry.setText("")
+
+        self.show()
+
+app = qtw.QApplication([])
+mw = MainWindow()
+
+app.exec_()
+
+# import PyQt5.QtWidgets as qtw
+# import PyQt5.QtGui as qtg
+
+# class MainWindow(qtw.QWidget):
+#     def __init__(self):
+#         super().__init__()
+#         # title
+#         self.setWindowTitle("Combo box")
+#         self.setLayout(qtw.QVBoxLayout())
+
+#         #lable
+#         my_label = qtw.QLabel("Pick something:")
+#         my_label.setFont(qtg.QFont('Helvetica', 18))
+#         self.layout().addWidget(my_label)
+
+#         # create a combo box
+#         my_combo = qtw.QComboBox(self, editable = True, insertPolicy = qtw.QComboBox.InsertAtTop)
+#         # Add item to combo box
+#         my_combo.addItem("ok1", "ok")
+#         my_combo.addItem("ok2", )
+#         my_combo.addItem("ok3", "god")
+#         my_combo.addItem("ok4", qtw.QWidget)
+#         my_combo.addItems(["1234", "2134", "3756"])
+#         self.layout().addWidget(my_combo)
+
+#         #button
+#         my_button = qtw.QPushButton("Select", clicked = lambda: press_it())
+#         self.layout().addWidget(my_button)
+
+#         def press_it():
+#             my_label.setText(f"You picked {my_combo.currentIndex()}!!")
+#             my_label.setText(f"You picked {my_combo.currentData()}!!")
+#             my_label.setText(f"You picked {my_combo.currentText()}!!")
+#         self.show()
+
+# app = qtw.QApplication([])
+# mw = MainWindow()
+
+# app.exec_()
